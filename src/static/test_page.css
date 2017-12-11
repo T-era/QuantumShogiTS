@@ -1,0 +1,33 @@
+div.test_case {
+  witch: auto;
+}
+div.test_case .title {
+  position: relative;
+  cursor: pointer;
+}
+div.test_case input {
+  display: none;
+}
+div.test_case label:hover {
+  background: #ffa;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+}
+div.test_case label:after {
+  color: #aaa;
+  content: "+";
+}
+div.test_case input:checked ~ label:after {
+  color: #aaa;
+  content: "^";
+}
+div.test_case .result_detail {
+  margin-left: 20px;
+  display: none;
+}
+div.test_case input:checked ~ .result_detail{
+  display: block;
+}
+.test_errors {
+  color: red;
+}
