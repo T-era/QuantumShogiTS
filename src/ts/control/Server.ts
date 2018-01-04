@@ -12,6 +12,7 @@ module Control {
     show(callback :FieldShow);
     showInHand(side :boolean, callback :(q :Rule.Quantum)=>void);
     get(at :common.Pos) :Rule.Quantum;
+    getInHand(side :boolean, at :number) :Rule.Quantum;
     aHandPut(side :boolean, q :Rule.Quantum, to :common.Pos);
     aHandStep(side :boolean, from :common.Pos, to:common.Pos, reface :boolean) :boolean;
   }
@@ -76,6 +77,15 @@ module Control {
     get(at :common.Pos) :Rule.Quantum {
       return this.field[at._y][at._x];
     }
+
+    getInHand(side :boolean, at :number) :Rule.Quantum {
+      var list = side ? this.inHandT : this.inHandF;
+      if (at < 0 || at > list.length) {
+        return null;
+      }
+      return list[at];
+    }
+
     aHandPut(side :boolean, q :Rule.Quantum, to :common.Pos) {
       var action = q.putOn.prepare(to);
       if (this.inTern != side) throw 'Not your turn';
