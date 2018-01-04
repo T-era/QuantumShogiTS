@@ -54,7 +54,9 @@ module SoloView {
 
         ls.forEach(function(str, index) {
           ctx.strokeText(str, point.cx + 30, point.cy + cy + index * 15, 40);
-        })
+        });
+        ctx.stroke();
+
         function splitBy(len :number, l :string[]) {
           var ret = [];
           for (var begin = 0; begin < l.length; begin += len) {
