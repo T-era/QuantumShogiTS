@@ -1,0 +1,3 @@
+[submodule "vendor/PlateEditorTS"]
+	path = vendor/PlateEditorTS
+	url = https://github.com/T-era/PlateEditorTS
