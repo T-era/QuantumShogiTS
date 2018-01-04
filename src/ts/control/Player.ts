@@ -7,7 +7,7 @@ module Control {
     showInHand(callback :(q :Rule.Quantum)=>void);
     get(at :common.Pos) :Rule.Quantum;
     aHandPut(q :Rule.Quantum, to :common.Pos);
-    aHandStep(from :common.Pos, to:common.Pos, reface :boolean) :boolean;
+    aHandStep(from :common.Pos, to:common.Pos, listenReface :() => boolean) :boolean;
   }
 
   export class SingleNodePlayer {
@@ -34,8 +34,8 @@ module Control {
     aHandPut(q :Rule.Quantum, to :common.Pos) {
       return this.server.aHandPut(this.side, q, to);
     }
-    aHandStep(from :common.Pos, to:common.Pos, reface :boolean) :boolean {
-      return this.server.aHandStep(this.side, from, to, reface);
+    aHandStep(from :common.Pos, to:common.Pos, listenReface :() => boolean) :boolean {
+      return this.server.aHandStep(this.side, from, to, listenReface);
     }
   }
 }

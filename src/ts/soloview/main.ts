@@ -69,8 +69,10 @@ module SoloView {
                 ? (to._y < 3 || from._y < 3)
                 : (to._y > 5 || from._y > 5);
             var canReface = (this.onHover.face == 0 && inArea)
-            var refacing = canReface ? confirm('Reface?') : false;
-            var result = this.server.aHandStep(this.server.getInTern(), from, to, refacing);
+            //var refacing = canReface ? confirm('Reface?') : false;
+            var result = this.server.aHandStep(this.server.getInTern(), from, to, function() {
+              return confirm('Reface?');
+            });
             if (result) {
               alert('finish');
             }

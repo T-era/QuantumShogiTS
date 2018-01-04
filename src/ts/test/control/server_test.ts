@@ -14,13 +14,13 @@ module Test {
             true,
             new common.Pos(0, 6),
             new common.Pos(0, 2),
-            false),
+            function() { return false; }),
           false);
         testCase.show('Step 2nd', server.aHandStep(
             false,
             new common.Pos(1, 2),
             new common.Pos(1, 6),
-            true),
+            function() { return true; }),
           false);
         testCase.show('inhand t',
           server.inHandT,
@@ -39,25 +39,25 @@ module Test {
             true,
             new common.Pos(0, 6),
             new common.Pos(0, 5),
-            false),
+            function() { return false; }),
           false);
         testCase.show('Step 2nd', server.aHandStep(
             false,
             new common.Pos(1, 2),
             new common.Pos(1, 3),
-            false),
+            function() { return false; }),
           false);
         testCase.show('Step 3rd', server.aHandStep(
             true,
             new common.Pos(0, 5),
             new common.Pos(0, 4),
-            false),
+            function() { return false; }),
           false);
         testCase.show('Step 4th', server.aHandStep(
             false,
             new common.Pos(1, 3),
             new common.Pos(1, 4),
-            false),
+            function() { return false; }),
           false);
         testCase.show('inhand t',
           server.inHandT,
@@ -76,20 +76,20 @@ module Test {
             true,
             new common.Pos(0, 6),
             new common.Pos(0, 2),
-            false),
+            function() { return false; }),
           false);
         var qInHand = server.get(new common.Pos(0, 2));
         testCase.show('Step 2nd take', server.aHandStep(
             false,
             new common.Pos(1, 2),
             new common.Pos(0, 2),
-            false),
+            function() { return false; }),
           false);
         testCase.show('Step 3rd', server.aHandStep(
             true,
             new common.Pos(1, 6),
             new common.Pos(1, 5),
-            false),
+            function() { return false; }),
           false);
         server.aHandPut(
             false,
@@ -99,13 +99,13 @@ module Test {
             true,
             new common.Pos(2, 6),
             new common.Pos(2, 5),
-            false),
+            function() { return false; }),
           false);
         testCase.show('Step 6th as hi', server.aHandStep(
             false,
             new common.Pos(4, 4),
             new common.Pos(6, 4),
-            false),
+            function() { return false; }),
           false);
         testCase.show('true side no hi',
           server.originT.pieces.map(function(q) {
@@ -143,7 +143,7 @@ module Test {
         ];
         function _moveTo(side, from, dx, dy, reface) {
           var to = p(from._x + dx, from._y + dy);
-          server.aHandStep(side, from, to, reface);
+          server.aHandStep(side, from, to, function() { return reface; });
           from._x = to._x;
           from._y = to._y;
         }

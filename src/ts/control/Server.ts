@@ -14,7 +14,7 @@ module Control {
     get(at :common.Pos) :Rule.Quantum;
     getInHand(side :boolean, at :number) :Rule.Quantum;
     aHandPut(side :boolean, q :Rule.Quantum, to :common.Pos);
-    aHandStep(side :boolean, from :common.Pos, to:common.Pos, reface :boolean) :boolean;
+    aHandStep(side :boolean, from :common.Pos, to:common.Pos, listenReface :() => boolean) :boolean;
   }
   export class Server implements ServerInterface {
     inHandT :Rule.Quantum[]
@@ -108,14 +108,14 @@ module Control {
       this.turnChange();
     }
 
-    aHandStep(side :boolean, from :common.Pos, to:common.Pos, reface :boolean) :boolean {
+    aHandStep(side :boolean, from :common.Pos, to:common.Pos, listenReface :() => boolean) :boolean {
       var q = this.get(from);
       var action = q.move.prepare(to);
       if (this.inTern != side) throw 'Not your turn';
       if (q.side != side) throw 'Not your piece';
       if (! q.pos.equals(from)) throw 'XX Conflict XX';
-      if (reface && ! _isEdge(side, to)) throw "Can't reface";
-      if (reface && ! q.reface.prepare(void 0).can()) throw "Can't reface";
+      //if (reface && ! _isEdge(side, to)) throw "Can't reface";
+      //if (reface && ! q.reface.prepare(void 0).can()) throw "Can't reface";
       if (! action.can()) throw "Can't move-to ...";
       if (this._somethingInside(from, to)) throw "Cant' straddle another piece";
 
@@ -135,8 +135,10 @@ module Control {
       action.do();
       this.field[from._y][from._x] = null;
       this.field[to._y][to._x] = q;
-      if (reface) {
-        q.reface.prepare(void 0).do();
+      if ((_isEdge(side, from) || _isEdge(side, to)) && q.reface.prepare(void 0).can()) {
+        if (listenReface()) {
+          q.reface.prepare(void 0).do();
+        }
       }
 
       var originRival = side ? this.originF : this.originT;
