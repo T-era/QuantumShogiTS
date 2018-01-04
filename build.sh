@@ -1,7 +1,8 @@
 SRC_DIR=./src
 DEST_DIR=./dest
 
-TSS=("common" "rule" "control" "test")
+TSS=("common" "rule" "control" "soloview" "test")
+VENDOR=("PlateEditorTS")
 
 # Prepare TypeScript d files.
 ./dbuild.sh
@@ -14,6 +15,13 @@ tsc --out $DEST_DIR/main.js $SRC_DIR/ts/main.ts
 
 # Copy static files.
 cp $SRC_DIR/static/* $DEST_DIR/
+
+for name in ${VENDOR[@]}; do
+  if [ ! -e $DEST_DIR/$name/ ]; then
+    mkdir $DEST_DIR/$name/
+  fi
+  cp vendor/$name/dest/*.js $DEST_DIR/$name/
+done
 
 # Convert slim files to html.
 for nm in $SRC_DIR/slim/*.slim; do

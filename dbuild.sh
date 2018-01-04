@@ -1,11 +1,14 @@
 SRC_DIR=./src
 LIB_DIR=${SRC_DIR}/lib
-TARGETS=("common" "rule" "control")
+TARGETS=("common" "rule" "control" "soloview")
+VENDOR=("PlateEditorTS")
 
-cd vendor/PlateEditorTS/src
-./dbuild.sh
-./build.sh
-cd -
+for name in ${VENDOR[@]}; do
+  cd vendor/$name/src
+  ./dbuild.sh
+  ./build.sh
+  cd -
+done
 
 # Compile TypeScript code.
 for fld in ${TARGETS[@]}; do
