@@ -9,6 +9,7 @@ module common {
     }
 
     equals(arg :Pos) :boolean {
+      if (arg === null) return false;
       return (this._x == arg._x
           && this._y == arg._y);
     }

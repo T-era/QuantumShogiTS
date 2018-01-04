@@ -107,6 +107,7 @@ module Control {
       if (reface && ! _isEdge(side, to)) throw "Can't reface";
       if (reface && ! q.reface.prepare(void 0).can()) throw "Can't reface";
       if (! action.can()) throw "Can't move-to ...";
+      if (this._somethingInside(from, to)) throw "Cant' straddle another piece";
 
       var toInHand = this.get(to)
       if (toInHand != null) {
@@ -147,6 +148,23 @@ module Control {
       this.turnChangeCallback.forEach(function(tcc) {
         tcc(this.inTern);
       });
+    }
+
+    _somethingInside(from :common.Pos, to :common.Pos) :boolean {
+      var dy = to._y - from._y;
+      var dx = to._x - from._x;
+      var ady = Math.abs(dy);
+      var adx = Math.abs(dx);
+      if ((ady <= 1 && adx <= 1)
+        || (adx == 1 && ady == 2)) return false;
+      var big = Math.max(adx, ady);
+      for (var i = 1; i < big; i ++) {
+        var x = from._x + (dx / big * i);
+        var y = from._y + (dy / big * i);
+
+        if (this.get(new common.Pos(x, y))) return true;
+      }
+      return false;
     }
   }
 

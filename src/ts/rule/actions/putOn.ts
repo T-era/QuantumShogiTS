@@ -16,9 +16,9 @@ module Rule {
 
         var edgeLine :number[];
         if (this.quantum.side) {
-          edgeLine = [8, 7];
-        } else {
           edgeLine = [0, 1];
+        } else {
+          edgeLine = [8, 7];
         }
 
         var forbidden :PieceType[];
