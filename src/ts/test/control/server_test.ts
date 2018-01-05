@@ -1,6 +1,7 @@
 /// <reference path='../../../lib/control.d.ts' />
 /// <reference path='../../../lib/rule.d.ts' />
 /// <reference path='../../../lib/common.d.ts' />
+/// <reference path='../../../lib/timer.d.ts' />
 
 module Test {
   export module ControlTest {
@@ -8,7 +9,7 @@ module Test {
 
     module HandByHand {
       all.push(function(dom) {
-        var server :Control.Server = new Control.Server();
+        var server :Control.Server = new Control.Server(Timer.newTimer(99,99));
         var testCase = new Test.TestCase(dom, 'Server Test 1');
         testCase.show('Step 1st', server.aHandStep(
             true,
@@ -33,7 +34,7 @@ module Test {
       });
 
       all.push(function(dom) {
-        var server :Control.Server = new Control.Server();
+        var server :Control.Server = new Control.Server(Timer.newTimer(99,99));
         var testCase = new Test.TestCase(dom, 'Server Test 2');
         testCase.show('Step 1st', server.aHandStep(
             true,
@@ -70,7 +71,7 @@ module Test {
       });
 
       all.push(function(dom) {
-        var server :Control.Server = new Control.Server();
+        var server :Control.Server = new Control.Server(Timer.newTimer(99,99));
         var testCase = new Test.TestCase(dom, 'Server Test 3');
         testCase.show('Step 1st', server.aHandStep(
             true,
@@ -134,7 +135,7 @@ module Test {
 
     module Finish {
       all.push(function(dom) {
-        var server :Control.Server = new Control.Server();
+        var server :Control.Server = new Control.Server(Timer.newTimer(99,99));
         var isFinished = false;
         server.setCallbacks(function() {}, function() { isFinished = true; });
         var p = function(x, y) { return new common.Pos(x, y); };

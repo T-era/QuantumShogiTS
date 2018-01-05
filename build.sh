@@ -1,7 +1,7 @@
 SRC_DIR=./src
 DEST_DIR=./dest
 
-TSS=("common" "rule" "control" "soloview" "test")
+TSS=("common" "rule" "control" "soloview" "timer" "test")
 VENDOR=("PlateEditorTS")
 
 # Prepare TypeScript d files.

@@ -1,6 +1,7 @@
 /// <reference path='../../lib/common.d.ts' />
 /// <reference path='../../lib/rule.d.ts' />
 /// <reference path='../../lib/control.d.ts' />
+/// <reference path='../../lib/timer.d.ts' />
 /// <reference path='../../../vendor/PlateEditorTS/src/lib/tools.d.ts' />
 /// <reference path='../../../vendor/PlateEditorTS/src/lib/hover.d.ts' />
 /// <reference path='../../../vendor/PlateEditorTS/src/lib/plates.d.ts' />
@@ -22,8 +23,8 @@ module SoloView {
     ctx :CanvasRenderingContext2D;
     _hov :hover.Hover;
 
-    constructor() {
-      this.server = new Control.Server();
+    constructor(gameTimer :Timer.Timer) {
+      this.server = new Control.Server(gameTimer);
       this.server.setCallbacks(
         function() {
           // Tern changed
@@ -39,6 +40,7 @@ module SoloView {
       this._hov = hover.newHover(this.cnv);
 
       this.cnv.onclick = this._canvasOnClick.bind(this);
+      this.server.start();
     }
     _canvasOnClick(e :MouseEvent) {
       try {
@@ -179,5 +181,15 @@ module SoloView {
       this.drawAll(this.ctx);
     }
   }
-  new Show().setPieceShow(SoloView.debugShow);
+  var timer = Timer.newTimer(10, 1);
+  var timerView = document.getElementById('timer_view');
+  new Show(timer).setPieceShow(SoloView.debugShow);
+
+  function showTimer() {
+    timerView.textContent = String(timer.showRemains());
+  }
+  (function timerOnTimer() {
+    showTimer();
+    setTimeout(timerOnTimer, 100);
+  })();
 }

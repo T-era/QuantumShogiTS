@@ -1,5 +1,6 @@
 /// <reference path='../../lib/rule.d.ts' />
 /// <reference path='../../lib/common.d.ts' />
+/// <reference path='../../lib/timer.d.ts' />
 
 module Control {
   export type FieldShow = (pos :common.Pos, q :Rule.Quantum)=>void
@@ -7,6 +8,7 @@ module Control {
   export type GOverCallback = (sideWin :boolean)=>void
 
   export interface ServerInterface {
+    start();
     setCallbacks(tcc :TurnChangeCallback, goc :GOverCallback);
     getInTern() :boolean
     show(callback :FieldShow);
@@ -17,18 +19,28 @@ module Control {
     aHandStep(side :boolean, from :common.Pos, to:common.Pos, listenReface :() => boolean) :boolean;
   }
   export class Server implements ServerInterface {
-    inHandT :Rule.Quantum[]
-    inHandF :Rule.Quantum[]
-    originT :Rule.Origin
-    originF :Rule.Origin
+    gameTimer :Timer.Timer;
 
-    inTern :boolean
-    field :Rule.Quantum[][]
+    inHandT :Rule.Quantum[];
+    inHandF :Rule.Quantum[];
+    originT :Rule.Origin;
+    originF :Rule.Origin;
+
+    inTern :boolean;
+    field :Rule.Quantum[][];
 
     turnChangeCallback :TurnChangeCallback[];
     gOverCallback :GOverCallback[];
 
-    constructor() {
+    constructor(gameTimer :Timer.Timer) {
+      this.gameTimer = gameTimer;
+      this.gameTimer.addCallback(function(side, result) {
+        if (result) {
+          this.gOverCallback.forEach(function(goc) {
+            goc(side);
+          });
+        }
+      }.bind(this));
       this.inTern = true;
 
       this.field = [];
@@ -52,6 +64,11 @@ module Control {
 
       this.turnChangeCallback = [];
       this.gOverCallback = [];
+    }
+
+    start() {
+      this.inTern = true;
+      this.gameTimer.start();
     }
 
     setCallbacks(tcc :TurnChangeCallback, goc :GOverCallback) {
@@ -88,7 +105,7 @@ module Control {
 
     aHandPut(side :boolean, q :Rule.Quantum, to :common.Pos) {
       var action = q.putOn.prepare(to);
-      if (this.inTern != side) throw 'Not your turn';
+      if (this.inTern !== side) throw 'Not your turn';
       if (q.side != side) throw 'Not your piece';
       if (q.pos != null) throw 'Not in hand';
       if (this.get(to) != null) throw 'Not empty';
@@ -111,7 +128,7 @@ module Control {
     aHandStep(side :boolean, from :common.Pos, to:common.Pos, listenReface :() => boolean) :boolean {
       var q = this.get(from);
       var action = q.move.prepare(to);
-      if (this.inTern != side) throw 'Not your turn';
+      if (this.inTern !== side) throw 'Not your turn';
       if (q.side != side) throw 'Not your piece';
       if (! q.pos.equals(from)) throw 'XX Conflict XX';
       //if (reface && ! _isEdge(side, to)) throw "Can't reface";
@@ -156,10 +173,12 @@ module Control {
     }
 
     turnChange() {
+      this.gameTimer.switchOff();
       this.inTern = ! this.inTern;
       this.turnChangeCallback.forEach(function(tcc) {
         tcc(this.inTern);
       });
+      this.gameTimer.switchOn();
     }
 
     _somethingInside(from :common.Pos, to :common.Pos) :boolean {

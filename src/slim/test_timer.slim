@@ -1,0 +1,29 @@
+html
+  head
+    script type='text/javascript' src='timer.js'
+  body
+    button onclick='javascript: change();' push
+    button onclick='javascript: show();' show
+    div id='output'
+    script type='text/javascript'
+      |
+        var output = document.getElementById('output');
+        var timerx = Timer.newTimer(10, 1);
+        // timerx.addCallback(function(a, b) {alert(a, b);});
+        timerx.start();
+        function change() {
+          try {
+            timerx.switchOff();
+            timerx.switchOn();
+          } catch(e) {
+          } finally {
+            show();
+          }
+        }
+        function show() {
+          output.textContent = String(timerx.showRemains());
+        }
+        (function timerShow() {
+          show();
+          setTimeout(timerShow, 1);
+        })();

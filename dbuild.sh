@@ -1,6 +1,6 @@
 SRC_DIR=./src
 LIB_DIR=${SRC_DIR}/lib
-TARGETS=("common" "rule" "control" "soloview")
+TARGETS=("common" "rule" "control" "soloview" "timer")
 VENDOR=("PlateEditorTS")
 
 for name in ${VENDOR[@]}; do
