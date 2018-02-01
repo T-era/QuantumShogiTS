@@ -146,6 +146,7 @@ module Control {
         toInHand.side = side;
         toInHand.face = 0;
         toInHand.possibility = Rule.remove(toInHand.possibility, Rule.ou);
+        toInHand._listener.Decide(toInHand, [Rule.ou]);
         inHand.push(toInHand);
       }
 
